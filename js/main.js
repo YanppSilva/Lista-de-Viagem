@@ -7,8 +7,17 @@ form.addEventListener("submit", (evento) => {
     // interrompe o envio do form para o navegador
     evento.preventDefault()
 
+    const nome = evento.target.elements['nome']
+    const quantidade = evento.target.elements['quantidade']
+
     // cria elemento toda vez que o formulario for submetido, a funcao é acionada.
-    criaElemento(evento.target.elements['nome'].value, evento.target.elements['quantidade'].value)
+    criaElemento(nome.value, quantidade.value)
+
+    // limpa imput
+    nome.value = ""
+    quantidade.value = ""
+
+
 })
 
 function criaElemento(nome, quantidade) {
@@ -24,6 +33,9 @@ function criaElemento(nome, quantidade) {
     novoItem.appendChild(numeroItem)
     novoItem.innerHTML += nome
     lista.appendChild(novoItem)
+
+    localStorage.setItem("nome", nome)
+    localStorage.setItem("quantidade", quantidade)
 }
 
 
