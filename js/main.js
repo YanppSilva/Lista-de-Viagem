@@ -5,51 +5,62 @@
 // captura dos elementos(formulario)
 const form = document.getElementById("novoItem")
 const lista = document.getElementById("lista")
-const itens = []
+
+// transcreve os dados que foram convertidos em string pelo JSON.stringfy em um objeto para o js.
+const itens = JSON.parse(localStorage.getItem("itens")) || []
+
+console.log(itens)
+
+
+itens.forEach((elemento) => {
+  
+  // criaNome recebe apenas nome e quantidade
+  console.log(elemento.nome, elemento.quantidade)
+})
 
 // envia o form para a página(acaba não entrando na função)
 form.addEventListener("submit", (evento) => {
-    // interrompe o envio do form para o navegador
-    evento.preventDefault()
+  // interrompe o envio do form para o navegador
+  evento.preventDefault()
 
-    const nome = evento.target.elements['nome']
-    const quantidade = evento.target.elements['quantidade']
+  const nome = evento.target.elements['nome']
+  const quantidade = evento.target.elements['quantidade']
 
-    // cria elemento toda vez que o formulario for submetido, a funcao é acionada.
-    criaElemento(nome.value, quantidade.value)
+  // cria elemento toda vez que o formulario for submetido, a funcao é acionada.
+  criaElemento(nome.value, quantidade.value)
 
-    // limpa imput
-    nome.value = ""
-    quantidade.value = ""
+  // limpa imput
+  nome.value = ""
+  quantidade.value = ""
 
 
 })
 
 function criaElemento(nome, quantidade) {
-   
-    // cria novo item 
-    const novoItem = document.createElement('li')
-    novoItem.classList.add("item")
 
-    const numeroItem = document.createElement('strong')
-    numeroItem.innerHTML = quantidade
+  // cria novo item
+  const novoItem = document.createElement('li')
+  novoItem.classList.add("item")
 
-    //insere um elemento criado dentro do outro (novoItem + numeroItem)
-    novoItem.appendChild(numeroItem)
+  const numeroItem = document.createElement('strong')
+  numeroItem.innerHTML = quantidade
 
-    novoItem.innerHTML += nome
+  //insere um elemento criado dentro do outro (novoItem + numeroItem)
+  novoItem.appendChild(numeroItem)
 
-    lista.appendChild(novoItem)
+  novoItem.innerHTML += nome
 
-    const itemAtual = {
-        "nome": nome,
-        "quantidade": quantidade
-    }
+  lista.appendChild(novoItem)
 
-    itens.push(itemAtual)
+  const itemAtual = {
+    "nome": nome,
+    "quantidade": quantidade
+  }
 
-    // locaStore só salva string, JSON.stringfy converte objetos em strings.
-    localStorage.setItem("item", JSON.stringify(itens))
+  itens.push(itemAtual)
+
+  // locaStore só salva string, JSON.stringfy converte objetos em strings.
+  localStorage.setItem("itens", JSON.stringify(itens))
 }
 
 
