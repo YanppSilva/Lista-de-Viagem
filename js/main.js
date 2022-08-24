@@ -1,3 +1,7 @@
+// ----------> Os tipos de dados armazenados no localStorage não devem ser considerados sensíveis, de acordo com a LGPD (Lei Geral de Proteção de Dados). Isso ocorre, pois ele não possui nenhuma camada de proteção, e os dados podem ser acessados facilmente por terceiros. Dados considerados sensíveis, devem ser armazenados em Cookies. <----------
+
+
+
 // captura dos elementos(formulario)
 const form = document.getElementById("novoItem")
 const lista = document.getElementById("lista")
@@ -47,6 +51,7 @@ function criaElemento(nome, quantidade) {
     // locaStore só salva string, JSON.stringfy converte objetos em strings.
     localStorage.setItem("item", JSON.stringify(itens))
 }
+
 
 
 
