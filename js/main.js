@@ -1,6 +1,7 @@
 // captura dos elementos(formulario)
 const form = document.getElementById("novoItem")
 const lista = document.getElementById("lista")
+const itens = []
 
 // envia o form para a página(acaba não entrando na função)
 form.addEventListener("submit", (evento) => {
@@ -31,11 +32,20 @@ function criaElemento(nome, quantidade) {
 
     //insere um elemento criado dentro do outro (novoItem + numeroItem)
     novoItem.appendChild(numeroItem)
+
     novoItem.innerHTML += nome
+
     lista.appendChild(novoItem)
 
-    localStorage.setItem("nome", nome)
-    localStorage.setItem("quantidade", quantidade)
+    const itemAtual = {
+        "nome": nome,
+        "quantidade": quantidade
+    }
+
+    itens.push(itemAtual)
+
+    // locaStore só salva string, JSON.stringfy converte objetos em strings.
+    localStorage.setItem("item", JSON.stringify(itens))
 }
 
 
