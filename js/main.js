@@ -1,68 +1,63 @@
-// ----------> Os tipos de dados armazenados no localStorage não devem ser considerados sensíveis, de acordo com a LGPD (Lei Geral de Proteção de Dados). Isso ocorre, pois ele não possui nenhuma camada de proteção, e os dados podem ser acessados facilmente por terceiros. Dados considerados sensíveis, devem ser armazenados em Cookies. <----------
+// Operador lógico que retorna com dados salvos, ou string vazia, utilizando localStorage.getItem, modificando o valor de `string` com JSON.parse()
 
-
-
-// captura dos elementos(formulario)
 const form = document.getElementById("novoItem")
 const lista = document.getElementById("lista")
-
-// transcreve os dados que foram convertidos em string pelo JSON.stringfy em um objeto para o js.
 const itens = JSON.parse(localStorage.getItem("itens")) || []
 
-console.log(itens)
-
-
+// Uso do forEach para que todos os itens já escritos na lista sejam mantidos ao atualizar a página 
 itens.forEach((elemento) => {
-
-  // criaNome recebe apenas nome e quantidade
-  criaElemento(elemento)
+    criaElemento(elemento)
 })
 
-// envia o form para a página(acaba não entrando na função)
+// Refatoração do addEventListener para receber as funções extras da função criaElemento
 form.addEventListener("submit", (evento) => {
-  // interrompe o envio do form para o navegador
-  evento.preventDefault()
+    evento.preventDefault()
 
-  const nome = evento.target.elements['nome']
-  const quantidade = evento.target.elements['quantidade']
-  
-  const itemAtual = {
-    "nome": nome.value,
-    "quantidade": quantidade.value
-  }
+    const nome = evento.target.elements['nome']
+    const quantidade = evento.target.elements['quantidade']
 
-  // cria elemento toda vez que o formulario for submetido, a funcao é acionada.
-  criaElemento(itemAtual)  
+    const existe = itens.find(elemento => elemento.nome === nome.value)
 
-  itens.push(itemAtual)
+    const itemAtual = {
+        "nome": nome.value,
+        "quantidade": quantidade.value
+    }
 
-  // locaStore só salva string, JSON.stringfy converte objetos em strings.
-  localStorage.setItem("itens", JSON.stringify(itens))
+    if (existe) {
+        itemAtual.id = existe.id
+        
+        atualizaElemento(itemAtual)
+    } else {
+        itemAtual.id = itens.length
 
-  // limpa imput
-  nome.value = ""
-  quantidade.value = ""
+        criaElemento(itemAtual)
+    
+        itens.push(itemAtual)
+    }
 
+    localStorage.setItem("itens", JSON.stringify(itens))
 
+    nome.value = ""
+    quantidade.value = ""
 })
+
+// Refatoração da função `criaElemento` para que possua apenas a função que faça sentido ao nome. 
 
 function criaElemento(item) {
+    const novoItem = document.createElement('li')
+    novoItem.classList.add("item")
 
-  // cria novo item
-  const novoItem = document.createElement('li')
-  novoItem.classList.add("item")
+    const numeroItem = document.createElement('strong')
+    numeroItem.innerHTML = item.quantidade
+    numeroItem.dataset.id = item.id
+    novoItem.appendChild(numeroItem)
 
-  const numeroItem = document.createElement('strong')
-  numeroItem.innerHTML = item.quantidade
+    novoItem.innerHTML += item.nome
 
-  //insere um elemento criado dentro do outro (novoItem + numeroItem)
-  novoItem.appendChild(numeroItem)
-
-  novoItem.innerHTML += item.nome
-
-  lista.appendChild(novoItem)
+    lista.appendChild(novoItem)
 }
 
-
-
+function atualizaElemento(item) {
+    document.querySelector("[data-id='"+item.id+"']").innerHTML = item.quantidade
+}
 
